@@ -1,0 +1,52 @@
+<p-table [value]="produtos" [responsive]="true" [(selection)]="produtoSelecionado" (onRowSelect)="abrirConfirmacaoRemocao($event)">
+  <ng-template pTemplate="header">
+    <tr>
+      <th>Nome</th>
+      <th>Unidade de Medida</th>
+      <th>Quantidade</th>
+      <th>Preço</th>
+      <th>É Perecível?</th>
+      <th>Data de Validade</th>
+      <th>Data de Fabricação</th>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-produto>
+    <tr>
+      <td>{{produto.nome}}</td>
+      <td>{{produto.unidadeMedida}}</td>
+      <td>{{produto.quantidade}}</td>
+      <td>{{produto.preco | currency : 'R$'}}</td>
+      <td>{{produto.ehPerecivel ? 'Sim' : 'Não'}}</td>
+      <td>{{produto.dataValidade | date: 'dd/MM/yyyy'}}</td>
+      <td>{{produto.dataFabricacao | date: 'dd/MM/yyyy'}}</td>
+      <td>
+        <p-button class="botoes-grid" label="Editar"></p-button>
+        <p-button class="botoes-grid" styleClass="ui-button-danger" (click)='abrirConfirmacaoRemocao(produto)' label="Deletar"></p-button>
+
+      </td>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="summary">
+    <div style="text-align:left">
+      <p-button routerLink="/cadastro" label="Novo Produto"></p-button>
+    </div>
+  </ng-template>
+</p-table>
+
+<p-toast position="center" key="confirmaRemocao" [modal]="true" [baseZIndex]="5000">
+  <ng-template let-message pTemplate="message">
+    <div style="text-align: center">
+      <i class="pi pi-exclamation-triangle" style="font-size: 3em"></i>
+      <h3>{{message.summary}}</h3>
+      <p>{{message.detail}}</p>
+    </div>
+    <div class="ui-g ui-fluid">
+      <div class="ui-g-6">
+        <button type="button" pButton (click)="confirmarRemocao()" label="Sim" class="ui-button-success"></button>
+      </div>
+      <div class="ui-g-6">
+        <button type="button" pButton label="Não" class="ui-button-secondary"></button>
+      </div>
+    </div>
+  </ng-template>
+</p-toast>

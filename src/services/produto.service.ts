@@ -10,7 +10,7 @@ export class ProdutoService {
   obterProdutos() {
     let produtos: Produto[] = [];
 
-    for (var i = 1; i < localStorage.length; i++)
+    for (var i = 1; i <= localStorage.length; i++)
       produtos.push(JSON.parse(localStorage.getItem(String(i))));
 
     return produtos;

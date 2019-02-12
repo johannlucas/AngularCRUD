@@ -9,6 +9,11 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppRoutingModule } from './app-routing.module';
 import { CadastroProdutoComponent } from './cadastro-produto/cadastro-produto.component';
 import { ListagemComponent } from './listagem/listagem.component';
+import { FormsModule } from '@angular/forms';
+import { InputTextModule } from 'primeng/inputtext';
+import { DropdownModule } from 'primeng/dropdown';
+import {CalendarModule} from 'primeng/calendar';
+import {CheckboxModule} from 'primeng/checkbox';
 
 @NgModule({
   declarations: [
@@ -22,7 +27,12 @@ import { ListagemComponent } from './listagem/listagem.component';
     ButtonModule,
     ToastModule,
     BrowserAnimationsModule,
-    AppRoutingModule
+    AppRoutingModule,
+    InputTextModule,
+    FormsModule,
+    DropdownModule,
+    CalendarModule,
+    CheckboxModule
   ],
   providers: [MessageService],
   bootstrap: [AppComponent]

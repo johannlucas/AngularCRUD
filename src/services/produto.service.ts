@@ -5,7 +5,7 @@ import { Produto } from '../models/produto';
   providedIn: 'root'
 })
 export class ProdutoService {
-  constructor() {}
+  constructor() { }
 
   obterProdutos() {
     let produtos: Produto[] = [];
@@ -17,17 +17,37 @@ export class ProdutoService {
   }
 
   obterProdutoPorKey(key: string) {
-    return JSON.parse(localStorage.getItem(key));
+    let produto: Produto = JSON.parse(localStorage.getItem(key));
+    this.tratarDatas(produto);
+    return produto;
   }
 
-  salvarProduto(produto: Produto, id?: string) {
-    let key = id == null ? String(localStorage.length + 1) : id;
-    produto.id = key;
-
-    localStorage.setItem(key, JSON.stringify(produto));
+  salvarProduto(produto: Produto) {
+    produto = this.verificarDuplicidade(produto);
+    localStorage.setItem(produto.id, JSON.stringify(produto));
   }
 
   removerProduto(produto: Produto) {
     localStorage.removeItem(produto.id);
+  }
+
+  verificarDuplicidade(produto: Produto) {
+    let prod: Produto = JSON.parse(localStorage.getItem(produto.id));
+    if (prod != null)
+      this.removerProduto(prod);
+
+    produto.id = String(localStorage.length + 1)
+
+    return produto;
+  }
+
+  tratarDatas(produto: Produto) {
+    if (produto == null)
+      return;
+    produto.dataValidade = new Date(produto.dataValidade);
+    produto.dataFabricacao = new Date(produto.dataFabricacao);
+
+    produto.dataValidade = new Date(produto.dataValidade.getFullYear(), produto.dataValidade.getMonth(), produto.dataValidade.getDay())
+    produto.dataFabricacao = new Date(produto.dataFabricacao.getFullYear(), produto.dataFabricacao.getMonth(), produto.dataFabricacao.getDay())
   }
 }

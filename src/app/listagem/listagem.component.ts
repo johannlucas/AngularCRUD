@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ProdutoService } from '../../services/produto.service';
 import { Produto } from '../../models/produto';
-import { UnidadeMedida } from '../../enums/unidade-medida.enum';
 import { MessageService } from 'primeng/api';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-listagem',
@@ -10,34 +10,26 @@ import { MessageService } from 'primeng/api';
   styleUrls: ['./listagem.component.css']
 })
 export class ListagemComponent implements OnInit {
-
   titulo = 'Desafio';
   produtos: Produto[];
   produtoSelecionado: Produto;
 
   constructor(private produtoService: ProdutoService,
-    private messageService: MessageService) {
+    private messageService: MessageService,
+    private router: Router,) {
     this.produtos = [];
   }
 
   ngOnInit() {
-    let produtoInicial: Produto = new Produto();
-
-    produtoInicial.nome = "Pão";
-    produtoInicial.preco = 5;
-    produtoInicial.quantidade = 1;
-    produtoInicial.unidadeMedida = UnidadeMedida.Unidade;
-    produtoInicial.ehPerecivel = true;
-    produtoInicial.dataValidade = new Date(2019, 2, 15);
-    produtoInicial.dataFabricacao = new Date(2019, 2, 9);
-
-    this.produtoService.salvarProduto(produtoInicial, '1');
-
     this.atualizarTable();
   }
 
   atualizarTable() {
     this.produtos = this.produtoService.obterProdutos();
+  }
+  
+  editarItem(produto: Produto) {
+    this.router.navigateByUrl(`cadastro/${produto.id}`)
   }
 
   //Toast
@@ -50,13 +42,28 @@ export class ListagemComponent implements OnInit {
 
   confirmarRemocao() {
     this.messageService.clear('confirmaRemocao');
-    this.produtoService.removerProduto(this.produtoSelecionado);
+
+    try {
+      this.produtoService.removerProduto(this.produtoSelecionado);
+      this.showSuccess();
+    }
+    catch {
+      this.showError();
+    }
 
     this.atualizarTable();
   }
 
   negarRemocao() {
     this.messageService.clear('confirmaRemocao');
+  }
+
+  showSuccess() {
+    this.messageService.add({ severity: 'success', summary: 'Sucesso!', detail: 'Produto removido' });
+  }
+
+  showError() {
+    this.messageService.add({ severity: 'error', summary: 'Oops!', detail: 'Algum erro ocorreu, contate o administrador do sistema.' });
   }
   //Toast
 }
